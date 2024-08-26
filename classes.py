@@ -1,53 +1,60 @@
 import pygame
 import random
+from images import *
 
 class Ship:
-    def __init__(self, screen) -> None:
-        self.screen = screen
+    def __init__(self) -> None:
         image = pygame.image.load("images/fighter_ship1.webp")
         self.image = pygame.transform.scale(image, (200, 200))
         self.rect = pygame.Surface.get_rect(self.image)
+        self.health = []
         self.bullets = []
         self.rect.x = 300
         self.rect.y = 700
 
 
-    def update(self):
+    def update(self, screen):
         pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[pygame.K_LEFT]:
+        if pressed_keys[pygame.K_LEFT] and self.rect.x -8 > -50:
             self.rect.x -= 8
-        if pressed_keys[pygame.K_RIGHT]:
+        if pressed_keys[pygame.K_RIGHT] and self.rect.x +8 < 650:
             self.rect.x += 8
-        self.screen.blit(self.image, (self.rect.x, self.rect.y))
+        screen.blit(self.image, (self.rect.x, self.rect.y))
         for bullet in self.bullets:
             if bullet.y - 7 > -30:
                 bullet.y -= 7
-                pygame.draw.rect(self.screen, (255, 255, 255), bullet)
+                pygame.draw.rect(screen, (255, 255, 255), bullet)
             elif bullet.y == -28:
                 self.bullets.remove(bullet)
-   
+
+        for symbol in self.health:
+            screen.blit(heart_image, (symbol.x, symbol.y))
 
     def shoot(self):
         new_bullet = pygame.Rect(self.rect.x + 95, self.rect.y, 10, 30)
         if len(self.bullets) < 6:
             self.bullets.append(new_bullet)
 
+    
+    def fill_health(self):
+        x, y = 750, 500
+        for _ in range(7):
+            self.health.append(pygame.Rect(x, y, 25, 25))
+            y -= 30
   
 
-
-
-class AsteroidLevel1:
-    def __init__(self) -> None:
-        image = pygame.image.load("images/asteroid1.png")
-        self.asteroid_image = pygame.transform.rotate(pygame.transform.scale(image, (100, 100)), 45)
-        self.velocity = 5
-        self.health = 3
-        self.rect = pygame.Surface.get_rect(self.asteroid_image)
-        self.rect.x = random.randint(0, 700)
-        self.y = -100
+class Asteroid:
+    def __init__(self, lvl) -> None:
+        if lvl == 1:
+            self.velocity = random.uniform(2.0, 3.0)
+            self.health = 1
+            self.rect = pygame.Surface.get_rect(asteroid_image_lvl1)
+            self.rect.x = random.randint(0, 700)
+            self.rect.y = random.randint(-1200, -400)
         
     
     def move(self, screen):
         self.rect.y += self.velocity
-        screen.blit(self.asteroid_image, (self.rect.x, self.rect.y))
-        pass
+        screen.blit(asteroid_image_lvl1, (self.rect.x, self.rect.y))
+        screen.blit(asteroid_h1, (self.rect.x+21, self.rect.y-15))
+        
