@@ -44,17 +44,27 @@ class Ship:
   
 
 class Asteroid:
-    def __init__(self, lvl) -> None:
-        if lvl == 1:
-            self.velocity = random.uniform(2.0, 3.0)
-            self.health = 1
-            self.rect = pygame.Surface.get_rect(asteroid_image_lvl1)
-            self.rect.x = random.randint(0, 700)
-            self.rect.y = random.randint(-1200, -400)
+    def __init__(self, level) -> None:
+        self.level = level
+        self.health = level
+        self.velocity = random.uniform(2.0, 3.0)
+        self.rect = pygame.Surface.get_rect(asteroid_images[level - 1])
+        self.rect.x = random.randint(0, 700)
+        self.rect.y = random.randint(-1200, -400)
         
     
     def move(self, screen):
         self.rect.y += self.velocity
-        screen.blit(asteroid_image_lvl1, (self.rect.x, self.rect.y))
-        screen.blit(asteroid_h1, (self.rect.x+21, self.rect.y-15))
-        
+        if self.level == self.health:
+            screen.blit(asteroid_health_image[0], (self.rect.x+21, self.rect.y-15))
+        elif self.level == 2:
+            if self.health == 1:
+                screen.blit(asteroid_health_image[3], (self.rect.x+21, self.rect.y-15))
+        elif self.level == 3:
+            if self.health == 2:
+                screen.blit(asteroid_health_image[1], (self.rect.x+21, self.rect.y-15))
+            elif self.health == 1:
+                screen.blit(asteroid_health_image[3], (self.rect.x+21, self.rect.y-15))
+
+        screen.blit(asteroid_images[self.level-1], (self.rect.x, self.rect.y))
+       
