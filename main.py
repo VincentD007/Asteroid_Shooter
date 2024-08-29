@@ -22,16 +22,6 @@ def check_collision(SHIP, asteroids_list):
                     asteroids_list.remove(asteroid)
 
 
-def next_level(game_level, Ship):
-    game_level += 1
-    SCREEN.blit(background, (0, 0)) 
-    SCREEN.blit(level_text[game_level-1], (235, 150))
-    Ship.fill_health()
-    Ship.update(SCREEN)
-    pygame.display.update()
-    pygame.time.delay(2000)
-
-
 lvl = 1
 Ship = Ship()
 
@@ -49,6 +39,7 @@ def main(level_value):
 
     while play_game:
         clock.tick(60)
+        print(asteroids)
         fire_bullet = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -68,11 +59,11 @@ def main(level_value):
         if len(asteroids) < 5:
             asteroids.append(Asteroid(level_value))
         for asteroid in asteroids: 
-            if asteroid.rect.y + asteroid.velocity < 900:
-                asteroid.move(SCREEN)
-            else:
+            if asteroid.rect.y + asteroid.velocity >= 900:
                 asteroids.remove(asteroid)
                 Ship.health.pop()
+            else:
+               asteroid.move(SCREEN) 
         Ship.update(SCREEN)
         check_collision(Ship, asteroids)
         pygame.display.update()

@@ -38,6 +38,7 @@ class Ship:
     
     def fill_health(self):
         x, y = 750, 500
+        self.health = []
         for _ in range(7):
             self.health.append(pygame.Rect(x, y, 25, 25))
             y -= 30
@@ -67,4 +68,3 @@ class Asteroid:
                 screen.blit(asteroid_health_image[3], (self.rect.x+21, self.rect.y-15))
 
         screen.blit(asteroid_images[self.level-1], (self.rect.x, self.rect.y))
-       
