@@ -31,7 +31,7 @@ def check_collision(SHIP, asteroids_list):
                 
 
 
-lvl = 5
+lvl = 1
 Ship = Ship()
 
 
