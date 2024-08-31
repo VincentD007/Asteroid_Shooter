@@ -36,7 +36,7 @@ Ship = Ship()
 
 
 def main(level_value):
-    max_level = 4
+    max_level = 5
     asteroids = []
     play_game = True
     SCREEN.blit(background, (0, 0))
@@ -53,7 +53,7 @@ def main(level_value):
     Ship.update(SCREEN)
     pygame.display.update()
     pygame.time.delay(2000)
-    pygame.time.set_timer(NEXT_LVL, 30000)
+    pygame.time.set_timer(NEXT_LVL, 20000, 1)
 
     # Game loop
     while play_game:
@@ -74,9 +74,9 @@ def main(level_value):
         SCREEN.fill((0, 0, 0))
         SCREEN.blit(background, (0, 0))
         # Limits the amount of asteroids being spawned
-        if len(asteroids) < level_value + 4:
+        if len(asteroids) < level_value + 3:
             if level_value == max_level:
-                asteroids.append(Asteroid(random.randint(1, max_level)))
+                asteroids.append(Asteroid(random.randint(1, 4)))
             else:
                 asteroids.append(Asteroid(level_value))
         # Updates the postion of the asteroids

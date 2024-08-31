@@ -1,6 +1,6 @@
 import pygame
 import random
-from images import *
+from images.icons import *
 
 class Ship:
     def __init__(self) -> None:
@@ -29,8 +29,7 @@ class Ship:
     def shoot(self):
         new_bullet = pygame.Rect(self.rect.x + 95, self.rect.y, 10, 30)
         if len(self.bullets) < 6:
-            self.bullets.append(new_bullet)
-
+            self.bullets.append(new_bullet)            
     
     def fill_health(self):
         x, y = 750, 500
