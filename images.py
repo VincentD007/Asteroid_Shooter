@@ -13,11 +13,9 @@ asteroid_image_lvl4 = pygame.transform.rotate(pygame.transform.scale(pygame.imag
 
 asteroid_images = [asteroid_image_lvl1, asteroid_image_lvl2, asteroid_image_lvl3, asteroid_image_lvl4]
 
-level_text_font = pygame.font.SysFont("Comic Sans", 150, False, False)
-
 heart_image = pygame.transform.scale(pygame.image.load("images/heart.png"), (25, 25))
 
-level_text_font = pygame.font.SysFont("Comic Sans", 150, False, False)
+level_text_font = pygame.font.SysFont("Comic Sans", 100, False, False)
 
 game_loose = level_text_font.render("Game Over", 1, (255, 50, 0))
 game_win = level_text_font.render("You Win!", 1, (0, 255, 0))

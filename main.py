@@ -31,7 +31,7 @@ def check_collision(SHIP, asteroids_list):
                 
 
 
-lvl = 1
+lvl = 5
 Ship = Ship()
 
 
@@ -48,7 +48,7 @@ def main(level_value):
 
     # Displays which level the play is on at the beginning of the level
     if play_game:
-        SCREEN.blit(level_text_font.render(f"Level {level_value}", 1, (255, 255, 255)), (235, 150))
+        SCREEN.blit(level_text_font.render(f"Level {level_value}", 1, (255, 255, 255)), (240, 150))
     Ship.fill_health()
     Ship.update(SCREEN)
     pygame.display.update()
@@ -89,7 +89,7 @@ def main(level_value):
         Ship.update(SCREEN)
         # Wnds the game if the player runs out of health
         if len(Ship.health) == 0:
-            SCREEN.blit(game_loose, (125, 150))
+            SCREEN.blit(game_loose, (150, 150))
             play_game = False
             pygame.display.update()
             pygame.time.delay(5000)
