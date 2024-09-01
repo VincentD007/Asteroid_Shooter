@@ -14,8 +14,7 @@ pygame.display.set_caption("Asteroid Shooter")
 clock = pygame.time.Clock()
 
 # Checks if the bullet/asteroid has gone off screen, and if a bullet has collided with an asteroid
-def check_collision(ship, asteroids):
-    score_increase = 0
+def check_collision(ship, asteroids, score):
     for asteroid in asteroids:
         if asteroid.rect.y >= HEIGHT:
             asteroids.remove(asteroid)
@@ -30,36 +29,43 @@ def check_collision(ship, asteroids):
                     asteroid.health -= 1
                     if asteroid.health == 0:
                         asteroids.remove(asteroid)
-                        score_increase += asteroid.level
+                        score[0] += asteroid.level
                     break
-    return score_increase
-                
+                    
+
+##### ADD PLAY AGAIN FEATURE AFTER WIN OR LOOSE #######                
 
 def main():
     level = 0
     max_level = 5
-    score = 0
+    score = [0]
     player_ship = Ship()
     asteroids_list = []
     play_game = True
+    player_died = False
     pause_level = False
+
     pygame.event.post(NEXT_LVL)
+
 
     # Game loop
     while play_game:
         clock.tick(60)
         fire_bullet = False
         for event in pygame.event.get():
+            if len(player_ship.health) == 0 or level > max_level:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_RCTRL:
+                    main()
             if event.type == pygame.QUIT:
                 play_game = False
-            if event == NEXT_LVL:
+            if event == NEXT_LVL and player_died == False:
                 pause_level = True
                 player_ship.fill_health()
                 level += 1
                 asteroids_list.clear()
                 if not level > max_level:
                     pygame.time.set_timer(RESUME_LEVEL, 3500, 1)
-            if event == RESUME_LEVEL:
+            if event == RESUME_LEVEL and player_died == False:
                 pause_level = False
                 pygame.time.set_timer(NEXT_LVL, 20000, 1)
             if event.type == pygame.KEYDOWN:
@@ -79,23 +85,24 @@ def main():
                 player_ship.shoot()
         else:
             if level > max_level:
-                SCREEN.blit(game_win, (150, 150))
-                SCREEN.blit(final_score_font.render(f"Score: {score}", 1, (255, 255, 255)), (200, 300))
-            elif not level > max_level:
+                SCREEN.blit(game_win, (140, 150))
+                SCREEN.blit(final_score_font.render(f"Score: {score[0]}", 1, (255, 255, 255)), (200, 300))
+                SCREEN.blit(play_again, (220, HEIGHT - 300))
+            elif not player_died:
                 SCREEN.blit(level_text_font.render(f"Level {level}", 1, (255, 255, 255)), (240, 150))
         for asteroid in asteroids_list:
             asteroid.move(SCREEN)
-                        # Checks for all possible collisions and returns a score increase value based on how many asteroids were destroyed.
-        score_increase = check_collision(player_ship, asteroids_list)
-        score += score_increase
+        # Checks for all possible collisions and returns a score increase value based on how many asteroids were destroyed.
+        check_collision(player_ship, asteroids_list, score)
         player_ship.update(SCREEN)
-        SCREEN.blit(score_font.render(f"Score: {score}", 1, (255, 255, 255)), (665, 25))
-
+        SCREEN.blit(score_font.render(f"Score: {score}", 1, (255, 255, 255)), (650, 25))
         if len(player_ship.health) == 0:
+            pause_level = True
+            player_died = True
+            asteroids_list.clear()
             SCREEN.blit(game_loose, (150, 150))
-            play_game = False
-            pygame.display.update()
-            pygame.time.delay(5000)
+            SCREEN.blit(final_score_font.render(f"Score: {score[0]}", 1, (255, 255, 255)), (200, 300))
+            SCREEN.blit(play_again, (220, HEIGHT - 300))
         pygame.display.update()
 
     pygame.quit()
