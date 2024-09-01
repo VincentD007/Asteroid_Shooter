@@ -1,6 +1,6 @@
 import pygame
 import random
-from images import *
+from images.icons import *
 
 class Ship:
     def __init__(self) -> None:
