@@ -12,7 +12,7 @@ class Ship:
         self.rect.x = 300
         self.rect.y = 700
 
-
+    # updates the position of the ship and it's bullets.
     def update(self, screen):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[pygame.K_LEFT] and self.rect.x - 8 > -50:
@@ -25,11 +25,15 @@ class Ship:
             pygame.draw.rect(screen, (255, 255, 255), bullet)
         for heart in self.health:
             screen.blit(heart_image, (heart.x, heart.y))
-
+    # Controls automatic fire to create bullet spacing
     def shoot(self):
         new_bullet = pygame.Rect(self.rect.x + 95, self.rect.y, 10, 30)
         if len(self.bullets) < 6:
-            self.bullets.append(new_bullet)
+            if len(self.bullets) == 0:
+                self.bullets.append(new_bullet)
+            else:  
+                if self.bullets[-1].y < 650:
+                    self.bullets.append(new_bullet)
 
     
     def fill_health(self):
@@ -44,7 +48,10 @@ class Asteroid:
     def __init__(self, level) -> None:
         self.level = level
         self.health = level
-        self.velocity = random.uniform(2.0, float(self.level + 2))
+        if level == 5:
+            self.velocity = random.randint(3, 6)
+        else:
+            self.velocity = random.randint(2, level + 1)
         self.rect = pygame.Surface.get_rect(asteroid_images[level - 1])
         self.rect.x = random.randint(0, 700)
         self.rect.y = random.randint(-1200, -400)

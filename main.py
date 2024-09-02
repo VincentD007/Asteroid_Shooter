@@ -5,8 +5,7 @@ from images.icons import *
 pygame.init()
 HEIGHT = 900
 WIDTH = 800
-bg_img = pygame.image.load("images/Space_Background.png")
-background = pygame.transform.scale(bg_img, (WIDTH, HEIGHT))
+background = pygame.transform.scale(pygame.image.load("images/Space_Background.png"), (WIDTH, HEIGHT))
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 NEXT_LVL = pygame.event.Event(pygame.USEREVENT + 1)
 RESUME_LEVEL = pygame.event.Event(pygame.USEREVENT + 2)
@@ -33,8 +32,6 @@ def check_collision(ship, asteroids, score):
                     break
                     
 
-##### ADD PLAY AGAIN FEATURE AFTER WIN OR LOOSE #######                
-
 def main():
     level = 0
     max_level = 5
@@ -51,7 +48,6 @@ def main():
     # Game loop
     while play_game:
         clock.tick(60)
-        fire_bullet = False
         for event in pygame.event.get():
             if len(player_ship.health) == 0 or level > max_level:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RCTRL:
@@ -67,21 +63,17 @@ def main():
                     pygame.time.set_timer(RESUME_LEVEL, 3500, 1)
             if event == RESUME_LEVEL and player_died == False:
                 pause_level = False
-                pygame.time.set_timer(NEXT_LVL, 20000, 1)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    if not pause_level:
-                        fire_bullet = True
+                pygame.time.set_timer(NEXT_LVL, 40000, 1)
+
         SCREEN.fill((0, 0, 0))
         SCREEN.blit(background, (0, 0))
-
         if not pause_level:
             if len(asteroids_list) < level + 3:
                 if level == 5:
                     asteroids_list.append(Asteroid(random.randint(1, 4)))
                 else:
                     asteroids_list.append(Asteroid(level))
-            if fire_bullet:
+            if pygame.key.get_pressed()[pygame.K_SPACE]:
                 player_ship.shoot()
         else:
             if level > max_level:
@@ -92,10 +84,11 @@ def main():
                 SCREEN.blit(level_text_font.render(f"Level {level}", 1, (255, 255, 255)), (240, 150))
         for asteroid in asteroids_list:
             asteroid.move(SCREEN)
-        # Checks for all possible collisions and returns a score increase value based on how many asteroids were destroyed.
+        # Checks for all possible collisions while also updating the player score accordingly
         check_collision(player_ship, asteroids_list, score)
         player_ship.update(SCREEN)
         SCREEN.blit(score_font.render(f"Score: {score}", 1, (255, 255, 255)), (650, 25))
+        # Checks if the player has lost
         if len(player_ship.health) == 0:
             pause_level = True
             player_died = True
@@ -108,4 +101,5 @@ def main():
     pygame.quit()
 
 
-main()
+if __name__ == "__main__":
+    main()
