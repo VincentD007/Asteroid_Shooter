@@ -71,9 +71,9 @@ class Asteroid:
                 screen.blit(asteroid_health_image[3], (self.rect.x + 21, self.rect.y - 15))
         elif self.level == 4:
             if self.health == 3:
-                screen.blit(asteroid_health_image[2], (self.rect.x + 21, self.rect.y - 15))
+                screen.blit(asteroid_health_image[1], (self.rect.x + 21, self.rect.y - 15))
             elif self.health == 2:
-                screen.blit(asteroid_health_image[3], (self.rect.x + 21, self.rect.y - 15))
+                screen.blit(asteroid_health_image[2], (self.rect.x + 21, self.rect.y - 15))
             elif self.health == 1:
                 screen.blit(asteroid_health_image[3], (self.rect.x + 21, self.rect.y - 15))
 
